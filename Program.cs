@@ -1,4 +1,7 @@
 
+using Backend_REST_API.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Backend_REST_API
 {
     public class Program
@@ -13,6 +16,11 @@ namespace Backend_REST_API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<RestApiDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 
