@@ -2,13 +2,13 @@
 {
     public class Education
     {
-        public int Id { get; set; }
-        public string School { get; set; } = string.Empty;
-        public string Degree { get; set; } = string.Empty;
+        public int EducationID { get; set; }
+        public string School { get; set; }
+        public string Degree { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
-        public int PersonId { get; set; }
-        public Person Person { get; set; } = null!;
+        // Navigation property
+        public List<PersonEducation> PersonEducations { get; set; } = new();
     }
 }

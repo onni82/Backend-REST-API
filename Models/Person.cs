@@ -2,12 +2,13 @@
 {
     public class Person
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public int PersonID { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
 
-        public List<Education> Educations { get; set; } = new();
-        public List<WorkExperience> WorkExperiences { get; set; } = new();
+        // Navigation properties
+        public List<PersonEducation> PersonEducations { get; set; } = new();
+        public List<PersonWorkExperience> PersonWorkExperiences { get; set; } = new();
     }
 }
