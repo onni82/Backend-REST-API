@@ -87,6 +87,21 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 
                 return Results.Ok("Education added to person");
             });
+
+            // Remove an education from a person
+            app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
+            {
+                var personEducation = await context.PersonEducations
+                    .FirstOrDefaultAsync(pe => pe.PersonID == id && pe.EducationID == educationId);
+
+                if (personEducation is null)
+                    return Results.NotFound("Education relationship not found");
+
+                context.PersonEducations.Remove(personEducation);
+                await context.SaveChangesAsync();
+
+                return Results.Ok("Education removed from person");
+            });
         }
     }
 }
