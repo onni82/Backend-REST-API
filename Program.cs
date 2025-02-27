@@ -1,5 +1,6 @@
 
 using Backend_REST_API.Data;
+using Backend_REST_API.Endpoints.SetEndpoints;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend_REST_API
@@ -34,6 +35,8 @@ namespace Backend_REST_API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            SetEndpoints.RegisterEndpoints(app);
 
             app.Run();
         }

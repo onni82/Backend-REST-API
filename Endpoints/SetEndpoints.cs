@@ -1,9 +1,9 @@
 ﻿using Backend_REST_API.Data;
 using Backend_REST_API.Models;
 using Microsoft.EntityFrameworkCore;
-namespace Backend_REST_API.Endpoints
+namespace Backend_REST_API.Endpoints.SetEndpoints
 {
-    public class Endpoints
+    public class SetEndpoints
     {
         public async static void RegisterEndpoints(WebApplication app)
         {
