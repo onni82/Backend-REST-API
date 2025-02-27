@@ -9,15 +9,24 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
         {
             app.MapGet("/persons", async (RestApiDbContext context) =>
             {
-                var people = await context.Persons.Include(p => p.Educations).Include(p => p.WorkExperiences).ToListAsync();
+                var people = await context.Persons
+                    .Include(p => p.PersonEducations)
+                        .ThenInclude(pe => pe.Education)
+                    .Include(p => p.PersonWorkExperiences)
+                        .ThenInclude(pw => pw.WorkExperience)
+                    .ToListAsync();
+
                 return Results.Ok(people);
             });
 
             app.MapGet("/persons/{id}", async (int id, RestApiDbContext context) =>
             {
-                var person = await context.Persons.Include(p => p.Educations)
-                                                  .Include(p => p.WorkExperiences)
-                                                  .FirstOrDefaultAsync(p => p.Id == id);
+                var person = await context.Persons
+                    .Include(p => p.PersonEducations)
+                        .ThenInclude(pe => pe.Education)
+                    .Include(p => p.PersonWorkExperiences)
+                        .ThenInclude(pw => pw.WorkExperience)
+                    .FirstOrDefaultAsync(p => p.PersonID == id);
 
                 return person is not null ? Results.Ok(person) : Results.NotFound();
             });
@@ -27,7 +36,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             {
                 context.Persons.Add(person);
                 await context.SaveChangesAsync();
-                return Results.Created($"/persons/{person.Id}", person);
+                return Results.Created($"/persons/{person.PersonID}", person);
             });
 
             app.MapPut("/persons/{id}", async (int id, Person updatedPerson, RestApiDbContext context) =>
@@ -36,7 +45,6 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 if (person == null) return Results.NotFound();
 
                 person.Name = updatedPerson.Name;
-                person.Description = updatedPerson.Description;
                 person.Email = updatedPerson.Email;
 
                 await context.SaveChangesAsync();
@@ -48,6 +56,13 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 var person = await context.Persons.FindAsync(id);
                 if (person == null) return Results.NotFound();
 
+                // Remove related entries in many-to-many tables
+                var personEducations = context.PersonEducations.Where(pe => pe.PersonID == id);
+                var personWorkExperiences = context.PersonWorkExperiences.Where(pw => pw.PersonID == id);
+                context.PersonEducations.RemoveRange(personEducations);
+                context.PersonWorkExperiences.RemoveRange(personWorkExperiences);
+
+                // Remove person
                 context.Persons.Remove(person);
                 await context.SaveChangesAsync();
                 return Results.NoContent();
