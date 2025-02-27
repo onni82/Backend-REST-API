@@ -102,6 +102,22 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 
                 return Results.Ok("Education removed from person");
             });
+
+            // Add a work experience to a person
+            app.MapPost("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
+            {
+                var person = await context.Persons.FindAsync(id);
+                var workExperience = await context.WorkExperiences.FindAsync(workId);
+
+                if (person is null || workExperience is null)
+                    return Results.NotFound("Person or Work Experience not found");
+
+                var personWorkExperience = new PersonWorkExperience { PersonID = id, WorkID = workId };
+                context.PersonWorkExperiences.Add(personWorkExperience);
+                await context.SaveChangesAsync();
+
+                return Results.Ok("Work experience added to person");
+            });
         }
     }
 }
