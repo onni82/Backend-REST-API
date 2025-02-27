@@ -7,6 +7,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
     {
         public async static void RegisterEndpoints(WebApplication app)
         {
+            // Get all persons with their related data
             app.MapGet("/persons", async (RestApiDbContext context) =>
             {
                 var people = await context.Persons
@@ -19,6 +20,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 return Results.Ok(people);
             });
 
+            // Get a person by ID, including educations and work experiences
             app.MapGet("/persons/{id}", async (int id, RestApiDbContext context) =>
             {
                 var person = await context.Persons
@@ -31,7 +33,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 return person is not null ? Results.Ok(person) : Results.NotFound();
             });
 
-
+            // Create a new person
             app.MapPost("/persons", async (Person person, RestApiDbContext context) =>
             {
                 context.Persons.Add(person);
@@ -39,6 +41,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 return Results.Created($"/persons/{person.PersonID}", person);
             });
 
+            // Update a person
             app.MapPut("/persons/{id}", async (int id, Person updatedPerson, RestApiDbContext context) =>
             {
                 var person = await context.Persons.FindAsync(id);
@@ -51,6 +54,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 return Results.NoContent();
             });
 
+            // Delete a person and remove their relationships first
             app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
             {
                 var person = await context.Persons.FindAsync(id);
