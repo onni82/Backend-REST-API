@@ -71,6 +71,22 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 await context.SaveChangesAsync();
                 return Results.NoContent();
             });
+
+            // Add an education to a person
+            app.MapPost("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
+            {
+                var person = await context.Persons.FindAsync(id);
+                var education = await context.Educations.FindAsync(educationId);
+
+                if (person is null || education is null)
+                    return Results.NotFound("Person or Education not found");
+
+                var personEducation = new PersonEducation { PersonID = id, EducationID = educationId };
+                context.PersonEducations.Add(personEducation);
+                await context.SaveChangesAsync();
+
+                return Results.Ok("Education added to person");
+            });
         }
     }
 }
