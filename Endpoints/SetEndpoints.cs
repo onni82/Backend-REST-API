@@ -70,24 +70,21 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.NoContent();
 			});
 
-            // Add an education to a person
-            app.MapPost("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
-            {
-                var person = await context.Persons.FindAsync(id);
-                var education = await context.Educations.FindAsync(educationId);
+			// Add an education to a person
+			app.MapPost("/persons/{id}/educations", async (int id, Education education, RestApiDbContext context) =>
+			{
+				var person = await context.Persons.FindAsync(id);
+				if (person == null) return Results.NotFound("Person not found");
 
-                if (person is null || education is null)
-                    return Results.NotFound("Person or Education not found");
+				education.PersonId = id;
+				context.Educations.Add(education);
+				await context.SaveChangesAsync();
 
-                var education = new Education { PersonId = id, EducationId = educationId };
-                context.Educations.Add(education);
-                await context.SaveChangesAsync();
+				return Results.Created($"/educations/{education.EducationId}", education);
+			});
 
-                return Results.Ok("Education added to person");
-            });
-
-            // Remove an education from a person
-            app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
+			// Remove an education from a person
+			app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
             {
                 var personEducation = await context.Educations
                     .FirstOrDefaultAsync(e => e.PersonId == id && e.EducationId == educationId);
