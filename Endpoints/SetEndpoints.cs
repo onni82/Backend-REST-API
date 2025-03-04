@@ -73,6 +73,8 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			// Add an education to a person
 			app.MapPost("/persons/{id}/educations", async (int id, Education education, RestApiDbContext context) =>
 			{
+				if (id <= 0) return Results.BadRequest("Invalid PersonId.");
+
 				var person = await context.Persons.FindAsync(id);
 				if (person == null) return Results.NotFound("Person not found");
 
