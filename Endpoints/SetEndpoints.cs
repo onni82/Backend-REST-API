@@ -133,6 +133,27 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 
                 return Results.Ok("Work experience removed from person");
             });
-        }
+
+			// Get all work experiences with their related data
+			app.MapGet("/workexperiences", async (RestApiDbContext context) =>
+			{
+				//var people = await context.Persons
+				//	.Include(p => p.PersonEducations)
+				//		.ThenInclude(pe => pe.Education)
+				//	.Include(p => p.PersonWorkExperiences)
+				//		.ThenInclude(pw => pw.WorkExperience)
+				//	.ToListAsync();
+
+				//return Results.Ok(people);
+			});
+
+			// Create a new work experience
+			app.MapPost("/workexperiences", async (WorkExperience workExperience, RestApiDbContext context) =>
+			{
+                context.WorkExperiences.Add(workExperience);
+                await context.SaveChangesAsync();
+                return Results.Created($"/workexperiences/{workExperience.WorkId}", workExperience);
+			});
+		}
     }
 }

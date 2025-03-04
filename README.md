@@ -7,15 +7,15 @@
 
 Du ska designa och skapa en databas som lagrar information om en persons utbildning och arbetslivserfarenhet.
 
-- [ ]  **Personlig information**
+- [x]  **Personlig information**
     - Namn, beskrivning, kontaktuppgifter.
-- [ ]  **Utbildningar**
-    - Skola, examen, st art- och slutdatum.
-- [ ]  **Arbetserfarenhet**
+- [x]  **Utbildningar**
+    - Skola, examen, start- och slutdatum.
+- [x]  **Arbetserfarenhet**
     - Jobbtitel, företag, beskrivning och år.
 
-- [ ]  Designa ett **ER-diagram** som visar hur tabellerna är relaterade.
-- [ ]  Skapa databasen med **Entity Framework Core** genom **Code-First**.
+- [x]  Designa ett **ER-diagram** som visar hur tabellerna är relaterade.
+- [x]  Skapa databasen med **Entity Framework Core** genom **Code-First**.
 - [ ]  Lägg upp en bild av ditt **ER-diagram** i **README-filen** i ditt Git-repo.
 
 ---
@@ -26,8 +26,8 @@ Ditt API ska göra det möjligt att hantera information om en persons utbildningar
 
 Anropen till databasen ska lösas genom Entity Framework.
 
-- [ ]  **Hämta all data** (alla personer, utbildningar och jobberfarenheter).
-- [ ]  **Hämta en specifik post** baserat på dess ID.
+- [x]  **Hämta all data** (alla personer, utbildningar och jobberfarenheter).
+- [x]  **Hämta en specifik post** baserat på dess ID.
 - [ ]  **Lägga till ny utbildning eller jobberfarenhet**.
 - [ ]  **Uppdatera befintlig information** (t.ex. ändra jobbtitel eller examensår).
 - [ ]  **Ta bort en utbildning eller jobberfarenhet**.
