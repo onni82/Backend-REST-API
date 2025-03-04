@@ -8,9 +8,11 @@ namespace Backend_REST_API.Models
 		[Key]
 		public int EducationId { get; set; }
 
+		[Required]
 		[MaxLength(50)]
 		public string School { get; set; }
 
+		[Required]
 		[MaxLength(50)]
 		public string Degree { get; set; }
 

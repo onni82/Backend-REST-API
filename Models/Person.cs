@@ -7,12 +7,15 @@ namespace Backend_REST_API.Models
 		[Key]
 		public int PersonId { get; set; }
 
+		[Required]
 		[MaxLength(50)]
 		public string Name { get; set; }
 
+		[Required]
 		[MaxLength(50)]
 		public string Email { get; set; }
 
+		[Required]
 		[Phone]
 		public string Phone { get; set; }
 
