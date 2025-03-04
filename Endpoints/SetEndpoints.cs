@@ -129,14 +129,8 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			// Get all work experiences with their related data
 			app.MapGet("/workexperiences", async (RestApiDbContext context) =>
 			{
-				//var people = await context.Persons
-				//	.Include(p => p.PersonEducations)
-				//		.ThenInclude(pe => pe.Education)
-				//	.Include(p => p.PersonWorkExperiences)
-				//		.ThenInclude(pw => pw.WorkExperience)
-				//	.ToListAsync();
-
-				//return Results.Ok(people);
+				var workExperiences = await context.WorkExperiences.ToListAsync();
+				return Results.Ok(workExperiences);
 			});
 
 			// Create a new work experience
