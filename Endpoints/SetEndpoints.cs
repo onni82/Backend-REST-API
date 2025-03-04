@@ -100,7 +100,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.NoContent();
 			});
 
-			// Update an education
+			// Update an education record
 			app.MapPut("/educations/{educationId}", async (int educationId, Education updatedEducation, RestApiDbContext context) =>
 			{
 				var education = await context.Educations.FindAsync(educationId);
