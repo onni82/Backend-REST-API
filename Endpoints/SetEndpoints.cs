@@ -113,18 +113,18 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 
 			// Remove a work experience from a person
 			app.MapDelete("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
-            {
-                var personWorkExperience = await context.WorkExperiences
-                    .FirstOrDefaultAsync(we => we.PersonId == id && we.WorkExperienceId == workId);
+			{
+				var workExperience = await context.WorkExperiences
+					.FirstOrDefaultAsync(we => we.PersonId == id && we.WorkExperienceId == workId);
 
-                if (personWorkExperience is null)
-                    return Results.NotFound("Work experience relationship not found");
+				if (workExperience == null)
+					return Results.NotFound("Work experience not found");
 
-                context.WorkExperiences.Remove(personWorkExperience);
-                await context.SaveChangesAsync();
+				context.WorkExperiences.Remove(workExperience);
+				await context.SaveChangesAsync();
 
-                return Results.Ok("Work experience removed from person");
-            });
+				return Results.NoContent();
+			});
 
 			// Get all work experiences with their related data
 			app.MapGet("/workexperiences", async (RestApiDbContext context) =>
