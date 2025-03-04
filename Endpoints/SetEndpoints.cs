@@ -53,7 +53,6 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 
 
 			// Delete a person and their associated Educations &Work Experiences
-
 			app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
             {
 				var person = await context.Persons
