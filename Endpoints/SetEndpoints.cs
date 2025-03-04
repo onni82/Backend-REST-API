@@ -146,6 +146,22 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.NoContent();
 			});
 
+			//Update a work experience record
+			app.MapPut("/workexperiences/{workExperienceId}", async (int workExperienceId, WorkExperience updatedWorkExperience, RestApiDbContext context) =>
+			{
+				var workExperience = await context.WorkExperiences.FindAsync(workExperienceId);
+				if (workExperience == null) return Results.NotFound("Work experience not found");
+
+				// Update only the necessary fields
+				workExperience.JobTitle = updatedWorkExperience.JobTitle;
+				workExperience.Company = updatedWorkExperience.Company;
+				workExperience.StartDate = updatedWorkExperience.StartDate;
+				workExperience.EndDate = updatedWorkExperience.EndDate;
+
+				await context.SaveChangesAsync();
+				return Results.Ok("Work experience updated successfully");
+			});
+
 			// Get all work experiences
 			app.MapGet("/workexperiences", async (RestApiDbContext context) =>
 			{
