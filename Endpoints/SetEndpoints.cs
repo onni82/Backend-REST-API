@@ -85,21 +85,21 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 
 			// Remove an education from a person
 			app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
-            {
-                var personEducation = await context.Educations
-                    .FirstOrDefaultAsync(e => e.PersonId == id && e.EducationId == educationId);
+			{
+				var education = await context.Educations
+					.FirstOrDefaultAsync(e => e.PersonId == id && e.EducationId == educationId);
 
-                if (personEducation is null)
-                    return Results.NotFound("Education relationship not found");
+				if (education == null)
+					return Results.NotFound("Education not found");
 
-                context.Educations.Remove(personEducation);
-                await context.SaveChangesAsync();
+				context.Educations.Remove(education);
+				await context.SaveChangesAsync();
 
-                return Results.Ok("Education removed from person");
-            });
+				return Results.NoContent();
+			});
 
-            // Add a work experience to a person
-            app.MapPost("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
+			// Add a work experience to a person
+			app.MapPost("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
             {
                 var person = await context.Persons.FindAsync(id);
                 var workExperience = await context.WorkExperiences.FindAsync(workId);
