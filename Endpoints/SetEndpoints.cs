@@ -126,7 +126,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.NoContent();
 			});
 
-			// Get all work experiences with their related data
+			// Get all work experiences
 			app.MapGet("/workexperiences", async (RestApiDbContext context) =>
 			{
 				var workExperiences = await context.WorkExperiences.ToListAsync();
