@@ -28,7 +28,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                         .ThenInclude(pe => pe.Education)
                     .Include(p => p.PersonWorkExperiences)
                         .ThenInclude(pw => pw.WorkExperience)
-                    .FirstOrDefaultAsync(p => p.PersonID == id);
+                    .FirstOrDefaultAsync(p => p.PersonId == id);
 
                 return person is not null ? Results.Ok(person) : Results.NotFound();
             });
@@ -38,7 +38,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             {
                 context.Persons.Add(person);
                 await context.SaveChangesAsync();
-                return Results.Created($"/persons/{person.PersonID}", person);
+                return Results.Created($"/persons/{person.PersonId}", person);
             });
 
             // Update a person
@@ -61,8 +61,8 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 if (person == null) return Results.NotFound();
 
                 // Remove related entries in many-to-many tables
-                var personEducations = context.PersonEducations.Where(pe => pe.PersonID == id);
-                var personWorkExperiences = context.PersonWorkExperiences.Where(pw => pw.PersonID == id);
+                var personEducations = context.PersonEducations.Where(pe => pe.PersonId == id);
+                var personWorkExperiences = context.PersonWorkExperiences.Where(pw => pw.PersonId == id);
                 context.PersonEducations.RemoveRange(personEducations);
                 context.PersonWorkExperiences.RemoveRange(personWorkExperiences);
 
@@ -81,7 +81,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 if (person is null || education is null)
                     return Results.NotFound("Person or Education not found");
 
-                var personEducation = new PersonEducation { PersonID = id, EducationID = educationId };
+                var personEducation = new PersonEducation { PersonId = id, EducationId = educationId };
                 context.PersonEducations.Add(personEducation);
                 await context.SaveChangesAsync();
 
@@ -92,7 +92,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
             {
                 var personEducation = await context.PersonEducations
-                    .FirstOrDefaultAsync(pe => pe.PersonID == id && pe.EducationID == educationId);
+                    .FirstOrDefaultAsync(pe => pe.PersonId == id && pe.EducationId == educationId);
 
                 if (personEducation is null)
                     return Results.NotFound("Education relationship not found");
@@ -112,7 +112,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 if (person is null || workExperience is null)
                     return Results.NotFound("Person or Work Experience not found");
 
-                var personWorkExperience = new PersonWorkExperience { PersonID = id, WorkID = workId };
+                var personWorkExperience = new PersonWorkExperience { PersonId = id, WorkId = workId };
                 context.PersonWorkExperiences.Add(personWorkExperience);
                 await context.SaveChangesAsync();
 
@@ -123,7 +123,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             app.MapDelete("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
             {
                 var personWorkExperience = await context.PersonWorkExperiences
-                    .FirstOrDefaultAsync(pw => pw.PersonID == id && pw.WorkID == workId);
+                    .FirstOrDefaultAsync(pw => pw.PersonId == id && pw.WorkId == workId);
 
                 if (personWorkExperience is null)
                     return Results.NotFound("Work experience relationship not found");

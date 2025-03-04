@@ -6,12 +6,14 @@ namespace Backend_REST_API.Models
     {
         [Key]
         public int WorkId { get; set; }
-        public string JobTitle { get; set; }
-        public string Company { get; set; }
-        public int StartYear { get; set; }
-        public int? EndYear { get; set; }
+		[MaxLength(50)]
+		public string JobTitle { get; set; }
+		[MaxLength(50)]
+		public string Company { get; set; }
+		public DateTime StartDate { get; set; }
+		public DateTime? EndDate { get; set; }
 
-        // Navigation property
-        public List<PersonWorkExperience> PersonWorkExperiences { get; set; } = new();
+		// Navigation property
+		public List<PersonWorkExperience> PersonWorkExperiences { get; set; } = new();
     }
 }

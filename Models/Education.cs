@@ -6,8 +6,10 @@ namespace Backend_REST_API.Models
     {
         [Key]
         public int EducationId { get; set; }
+        [MaxLength(50)]
         public string School { get; set; }
-        public string Degree { get; set; }
+		[MaxLength(50)]
+		public string Degree { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 

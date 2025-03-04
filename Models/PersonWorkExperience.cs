@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend_REST_API.Models
 {
     public class PersonWorkExperience
     {
-        [ForeignKey("Person")]
+		[Key]
+		public int PersonWorkExperienceId { get; set; }
+		[ForeignKey("Person")]
         public int PersonId { get; set; }
         public Person Person { get; set; }
 

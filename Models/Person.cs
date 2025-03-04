@@ -6,8 +6,11 @@ namespace Backend_REST_API.Models
     {
         [Key]
         public int PersonId { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+		[MaxLength(50)]
+		public string Name { get; set; }
+		[MaxLength(50)]
+		public string Email { get; set; }
+        [Phone]
         public string Phone { get; set; }
 
         // Navigation properties
