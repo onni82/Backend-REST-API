@@ -140,6 +140,13 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				await context.SaveChangesAsync();
 				return Results.Created($"/workexperiences/{workExperience.WorkExperienceId}", workExperience);
 			});
+
+			// Get all educations
+			app.MapGet("/educations", async (RestApiDbContext context) =>
+			{
+				var educations = await context.Educations.ToListAsync();
+				return Results.Ok(educations);
+			});
 		}
     }
 }
