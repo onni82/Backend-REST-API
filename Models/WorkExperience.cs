@@ -1,8 +1,11 @@
-﻿namespace Backend_REST_API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backend_REST_API.Models
 {
     public class WorkExperience
     {
-        public int WorkID { get; set; }
+        [Key]
+        public int WorkId { get; set; }
         public string JobTitle { get; set; }
         public string Company { get; set; }
         public int StartYear { get; set; }

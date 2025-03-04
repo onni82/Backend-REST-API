@@ -1,8 +1,11 @@
-﻿namespace Backend_REST_API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backend_REST_API.Models
 {
     public class Education
     {
-        public int EducationID { get; set; }
+        [Key]
+        public int EducationId { get; set; }
         public string School { get; set; }
         public string Degree { get; set; }
         public DateTime StartDate { get; set; }
