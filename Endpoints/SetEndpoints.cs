@@ -100,6 +100,22 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.NoContent();
 			});
 
+			// Update an education
+			app.MapPut("/educations/{educationId}", async (int educationId, Education updatedEducation, RestApiDbContext context) =>
+			{
+				var education = await context.Educations.FindAsync(educationId);
+				if (education == null) return Results.NotFound("Education not found");
+
+				// Update only the necessary fields
+				education.Degree = updatedEducation.Degree;
+				education.School = updatedEducation.School;
+				education.StartDate = updatedEducation.StartDate;
+				education.EndDate = updatedEducation.EndDate;
+
+				await context.SaveChangesAsync();
+				return Results.Ok("Education updated successfully");
+			});
+
 			// Add a work experience to a person
 			app.MapPost("/persons/{id}/workexperiences", async (int id, WorkExperience workExperience, RestApiDbContext context) =>
 			{
