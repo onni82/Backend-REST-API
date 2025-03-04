@@ -9,15 +9,15 @@ namespace Backend_REST_API.Models
 
 		[Required]
 		[MaxLength(50)]
-		public string Name { get; set; }
+		public required string Name { get; set; }
 
 		[Required]
 		[MaxLength(50)]
-		public string Email { get; set; }
+		public required string Email { get; set; }
 
 		[Required]
 		[Phone]
-		public string Phone { get; set; }
+		public required string Phone { get; set; }
 
 		public List<Education> Educations { get; set; } = new();
 		public List<WorkExperience> WorkExperiences { get; set; } = new();

@@ -10,13 +10,13 @@ namespace Backend_REST_API.Models
 
 		[Required]
 		[MaxLength(50)]
-		public string School { get; set; }
+		public required string School { get; set; }
 
 		[Required]
 		[MaxLength(50)]
-		public string Degree { get; set; }
+		public required string Degree { get; set; }
 
-		public DateTime StartDate { get; set; }
+		public required DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 
 		[ForeignKey("Person")]

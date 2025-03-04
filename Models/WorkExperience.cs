@@ -10,11 +10,11 @@ namespace Backend_REST_API.Models
 
 		[Required]
 		[MaxLength(50)]
-		public string JobTitle { get; set; }
+		public required string JobTitle { get; set; }
 
 		[Required]
 		[MaxLength(50)]
-		public string Company { get; set; }
+		public required string Company { get; set; }
 
 		[Required]
 		public DateTime StartDate { get; set; }
