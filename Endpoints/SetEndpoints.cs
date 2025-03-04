@@ -103,6 +103,8 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			// Add a work experience to a person
 			app.MapPost("/persons/{id}/workexperiences", async (int id, WorkExperience workExperience, RestApiDbContext context) =>
 			{
+				if (id <= 0) return Results.BadRequest("Invalid PersonId.");
+
 				var person = await context.Persons.FindAsync(id);
 				if (person == null) return Results.NotFound("Person not found");
 
