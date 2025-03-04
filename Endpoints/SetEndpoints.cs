@@ -54,20 +54,20 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             // Delete a person and remove their relationships first
             app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
             {
-                var person = await context.Persons.FindAsync(id);
-                if (person == null) return Results.NotFound();
+				var person = await context.Persons
+					.Include(p => p.Educations)
+					.Include(p => p.WorkExperiences)
+					.FirstOrDefaultAsync(p => p.PersonId == id);
 
-                // Remove related entries in many-to-many tables
-                var personEducations = context.Educations.Where(e => e.PersonId == id);
-                var personWorkExperiences = context.WorkExperiences.Where(we => we.PersonId == id);
-                context.Educations.RemoveRange(personEducations);
-                context.WorkExperiences.RemoveRange(personWorkExperiences);
+				if (person == null) return Results.NotFound();
 
-                // Remove person
-                context.Persons.Remove(person);
-                await context.SaveChangesAsync();
-                return Results.NoContent();
-            });
+				context.Educations.RemoveRange(person.Educations);
+				context.WorkExperiences.RemoveRange(person.WorkExperiences);
+				context.Persons.Remove(person);
+
+				await context.SaveChangesAsync();
+				return Results.NoContent();
+			});
 
             // Add an education to a person
             app.MapPost("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
