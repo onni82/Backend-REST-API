@@ -1,6 +1,7 @@
 ﻿using Backend_REST_API.Data;
 using Backend_REST_API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Json;
 namespace Backend_REST_API.Endpoints.SetEndpoints
 {
     public class SetEndpoints
@@ -175,6 +176,38 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				var workExperiences = await context.WorkExperiences.ToListAsync();
 				return Results.Ok(workExperiences);
 			});
+
+			// Get GitHub repositories
+			app.MapGet("/github/{username}", async (string username) =>
+			{
+				using var httpClient = new HttpClient();
+				httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+
+				var url = $"https://api.github.com/users/{username}/repos";
+				var repositories = await httpClient.GetFromJsonAsync<List<GitHubRepo>>(url);
+
+				if (repositories == null || repositories.Count == 0)
+				{
+					return Results.NotFound("No public repositories could be found for this user.");
+				}
+
+				var result = repositories.Select(repo => new
+				{
+					Name = repo.Name,
+					Language = string.IsNullOrEmpty(repo.Language) ? "unknown" : repo.Language,
+					Description = string.IsNullOrEmpty(repo.Description) ? "saknas" : repo.Description,
+					Url = repo.HtmlUrl
+				});
+
+				return Results.Ok(result);
+			});
 		}
     }
+	public class GitHubRepo
+	{
+		public string Name { get; set; }
+		public string Language { get; set; }
+		public string Description { get; set; }
+		public string HtmlUrl { get; set; }
+	}
 }
