@@ -147,6 +147,14 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				var educations = await context.Educations.ToListAsync();
 				return Results.Ok(educations);
 			});
+
+			// Create a new education
+			app.MapPost("/educations", async (Education education, RestApiDbContext context) =>
+			{
+				context.Educations.Add(education);
+				await context.SaveChangesAsync();
+				return Results.Created($"/educations/{education.EducationId}", education);
+			});
 		}
     }
 }
