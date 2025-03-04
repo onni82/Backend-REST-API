@@ -40,15 +40,16 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             // Update a person
             app.MapPut("/persons/{id}", async (int id, Person updatedPerson, RestApiDbContext context) =>
             {
-                var person = await context.Persons.FindAsync(id);
-                if (person == null) return Results.NotFound();
+				var person = await context.Persons.FindAsync(id);
+				if (person == null) return Results.NotFound();
 
-                person.Name = updatedPerson.Name;
-                person.Email = updatedPerson.Email;
+				person.Name = updatedPerson.Name;
+				person.Email = updatedPerson.Email;
+				person.Phone = updatedPerson.Phone;
 
-                await context.SaveChangesAsync();
-                return Results.NoContent();
-            });
+				await context.SaveChangesAsync();
+				return Results.NoContent();
+			});
 
             // Delete a person and remove their relationships first
             app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
