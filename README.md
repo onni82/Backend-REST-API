@@ -38,9 +38,9 @@ Anropen till databasen ska lösas genom Entity Framework.
 
 För att inkludera anrop till externa API:er ska du:
 
-- [ ]  Implementera en endpoint där en användare kan **ange sitt GitHub-användarnamn**.
-- [ ]  När användarnamnet anges ska API:et hämta **en lista över personens publika GitHub-repositories** via GitHub API.
-- [ ]  Returnera **minst** följande information:
+- [x]  Implementera en endpoint där en användare kan **ange sitt GitHub-användarnamn**.
+- [x]  När användarnamnet anges ska API:et hämta **en lista över personens publika GitHub-repositories** via GitHub API.
+- [x]  Returnera **minst** följande information:
     - Repository-namn.
     - Språk som används i repot (om inget språk anges, returnera “okänt” som värde).
     - Beskrivning av repot (om finns, annars “saknas” som värde).
