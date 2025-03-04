@@ -116,6 +116,13 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.Ok("Education updated successfully");
 			});
 
+			// Get all educations
+			app.MapGet("/educations", async (RestApiDbContext context) =>
+			{
+				var educations = await context.Educations.ToListAsync();
+				return Results.Ok(educations);
+			});
+
 			// Add a work experience to a person
 			app.MapPost("/persons/{id}/workexperiences", async (int id, WorkExperience workExperience, RestApiDbContext context) =>
 			{
@@ -167,13 +174,6 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			{
 				var workExperiences = await context.WorkExperiences.ToListAsync();
 				return Results.Ok(workExperiences);
-			});
-
-			// Get all educations
-			app.MapGet("/educations", async (RestApiDbContext context) =>
-			{
-				var educations = await context.Educations.ToListAsync();
-				return Results.Ok(educations);
 			});
 		}
     }
