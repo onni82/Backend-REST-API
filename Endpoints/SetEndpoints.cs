@@ -99,23 +99,20 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Add a work experience to a person
-			app.MapPost("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
-            {
-                var person = await context.Persons.FindAsync(id);
-                var workExperience = await context.WorkExperiences.FindAsync(workId);
+			app.MapPost("/persons/{id}/workexperiences", async (int id, WorkExperience workExperience, RestApiDbContext context) =>
+			{
+				var person = await context.Persons.FindAsync(id);
+				if (person == null) return Results.NotFound("Person not found");
 
-                if (person is null || workExperience is null)
-                    return Results.NotFound("Person or Work Experience not found");
+				workExperience.PersonId = id;
+				context.WorkExperiences.Add(workExperience);
+				await context.SaveChangesAsync();
 
-                var personWorkExperience = new WorkExperience { PersonId = id, WorkExperienceId = workId };
-                context.WorkExperiences.Add(personWorkExperience);
-                await context.SaveChangesAsync();
+				return Results.Created($"/workexperiences/{workExperience.WorkExperienceId}", workExperience);
+			});
 
-                return Results.Ok("Work experience added to person");
-            });
-
-            // Remove a work experience from a person
-            app.MapDelete("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
+			// Remove a work experience from a person
+			app.MapDelete("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
             {
                 var personWorkExperience = await context.WorkExperiences
                     .FirstOrDefaultAsync(we => we.PersonId == id && we.WorkExperienceId == workId);
