@@ -5,16 +5,14 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 {
     public class SetEndpoints
     {
-        public async static void RegisterEndpoints(WebApplication app)
+        public static void RegisterEndpoints(WebApplication app)
         {
             // Get all persons with their related data
             app.MapGet("/persons", async (RestApiDbContext context) =>
             {
                 var people = await context.Persons
-                    .Include(p => p.PersonEducations)
-                        .ThenInclude(pe => pe.Education)
-                    .Include(p => p.PersonWorkExperiences)
-                        .ThenInclude(pw => pw.WorkExperience)
+                    .Include(p => p.Educations)
+                    .Include(p => p.WorkExperiences)
                     .ToListAsync();
 
                 return Results.Ok(people);
@@ -24,10 +22,8 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             app.MapGet("/persons/{id}", async (int id, RestApiDbContext context) =>
             {
                 var person = await context.Persons
-                    .Include(p => p.PersonEducations)
-                        .ThenInclude(pe => pe.Education)
-                    .Include(p => p.PersonWorkExperiences)
-                        .ThenInclude(pw => pw.WorkExperience)
+                    .Include(p => p.Educations)
+                    .Include(p => p.WorkExperiences)
                     .FirstOrDefaultAsync(p => p.PersonId == id);
 
                 return person is not null ? Results.Ok(person) : Results.NotFound();
@@ -61,10 +57,10 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 if (person == null) return Results.NotFound();
 
                 // Remove related entries in many-to-many tables
-                var personEducations = context.PersonEducations.Where(pe => pe.PersonId == id);
-                var personWorkExperiences = context.PersonWorkExperiences.Where(pw => pw.PersonId == id);
-                context.PersonEducations.RemoveRange(personEducations);
-                context.PersonWorkExperiences.RemoveRange(personWorkExperiences);
+                var personEducations = context.Educations.Where(e => e.PersonId == id);
+                var personWorkExperiences = context.WorkExperiences.Where(we => we.PersonId == id);
+                context.Educations.RemoveRange(personEducations);
+                context.WorkExperiences.RemoveRange(personWorkExperiences);
 
                 // Remove person
                 context.Persons.Remove(person);
@@ -81,8 +77,8 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 if (person is null || education is null)
                     return Results.NotFound("Person or Education not found");
 
-                var personEducation = new PersonEducation { PersonId = id, EducationId = educationId };
-                context.PersonEducations.Add(personEducation);
+                var education = new Education { PersonId = id, EducationId = educationId };
+                context.Educations.Add(education);
                 await context.SaveChangesAsync();
 
                 return Results.Ok("Education added to person");
@@ -91,13 +87,13 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             // Remove an education from a person
             app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
             {
-                var personEducation = await context.PersonEducations
-                    .FirstOrDefaultAsync(pe => pe.PersonId == id && pe.EducationId == educationId);
+                var personEducation = await context.Educations
+                    .FirstOrDefaultAsync(e => e.PersonId == id && e.EducationId == educationId);
 
                 if (personEducation is null)
                     return Results.NotFound("Education relationship not found");
 
-                context.PersonEducations.Remove(personEducation);
+                context.Educations.Remove(personEducation);
                 await context.SaveChangesAsync();
 
                 return Results.Ok("Education removed from person");
@@ -112,8 +108,8 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
                 if (person is null || workExperience is null)
                     return Results.NotFound("Person or Work Experience not found");
 
-                var personWorkExperience = new PersonWorkExperience { PersonId = id, WorkId = workId };
-                context.PersonWorkExperiences.Add(personWorkExperience);
+                var personWorkExperience = new WorkExperience { PersonId = id, WorkExperienceId = workId };
+                context.WorkExperiences.Add(personWorkExperience);
                 await context.SaveChangesAsync();
 
                 return Results.Ok("Work experience added to person");
@@ -122,13 +118,13 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
             // Remove a work experience from a person
             app.MapDelete("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
             {
-                var personWorkExperience = await context.PersonWorkExperiences
-                    .FirstOrDefaultAsync(pw => pw.PersonId == id && pw.WorkId == workId);
+                var personWorkExperience = await context.WorkExperiences
+                    .FirstOrDefaultAsync(we => we.PersonId == id && we.WorkExperienceId == workId);
 
                 if (personWorkExperience is null)
                     return Results.NotFound("Work experience relationship not found");
 
-                context.PersonWorkExperiences.Remove(personWorkExperience);
+                context.WorkExperiences.Remove(personWorkExperience);
                 await context.SaveChangesAsync();
 
                 return Results.Ok("Work experience removed from person");
@@ -152,7 +148,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			{
                 context.WorkExperiences.Add(workExperience);
                 await context.SaveChangesAsync();
-                return Results.Created($"/workexperiences/{workExperience.WorkId}", workExperience);
+                return Results.Created($"/workexperiences/{workExperience.WorkExperienceId}", workExperience);
 			});
 		}
     }

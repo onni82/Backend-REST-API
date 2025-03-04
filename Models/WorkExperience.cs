@@ -1,19 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend_REST_API.Models
 {
-    public class WorkExperience
-    {
-        [Key]
-        public int WorkId { get; set; }
+	public class WorkExperience
+	{
+		[Key]
+		public int WorkExperienceId { get; set; }
+
 		[MaxLength(50)]
 		public string JobTitle { get; set; }
+
 		[MaxLength(50)]
 		public string Company { get; set; }
+
 		public DateTime StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 
-		// Navigation property
-		public List<PersonWorkExperience> PersonWorkExperiences { get; set; } = new();
-    }
+		[ForeignKey("Person")]
+		public int PersonId { get; set; }
+		public Person? Person { get; set; }
+	}
 }

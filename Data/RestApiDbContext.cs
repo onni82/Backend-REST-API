@@ -10,7 +10,5 @@ namespace Backend_REST_API.Data
         public DbSet<Person> Persons { get; set; }
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<Education> Educations { get; set; }
-        public DbSet<PersonWorkExperience> PersonWorkExperiences { get; set; }
-        public DbSet<PersonEducation> PersonEducations { get; set; }
     }
 }
