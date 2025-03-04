@@ -29,7 +29,7 @@ Anropen till databasen ska lösas genom Entity Framework.
 - [x]  **Hämta all data** (alla personer, utbildningar och jobberfarenheter).
 - [x]  **Hämta en specifik post** baserat på dess ID.
 - [x]  **Lägga till ny utbildning eller jobberfarenhet**.
-- [ ]  **Uppdatera befintlig information** (t.ex. ändra jobbtitel eller examensår).
+- [x]  **Uppdatera befintlig information** (t.ex. ändra jobbtitel eller examensår).
 - [x]  **Ta bort en utbildning eller jobberfarenhet**.
 
 ---
