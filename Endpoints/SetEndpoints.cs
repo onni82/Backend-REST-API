@@ -51,8 +51,10 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.NoContent();
 			});
 
-            // Delete a person and remove their relationships first
-            app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
+
+			/ Delete a person and their associated Educations &Work Experiences
+
+			app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
             {
 				var person = await context.Persons
 					.Include(p => p.Educations)
