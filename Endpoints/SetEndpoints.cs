@@ -177,9 +177,9 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Add an education to a person
-			app.MapPost("/persons/{id}/educations", async (int id, Education education, RestApiDbContext context) =>
+			app.MapPost("/persons/{id}/educations", async (int id, EducationDTO educationDTO, RestApiDbContext context) =>
 			{
-				if (string.IsNullOrWhiteSpace(education.Degree) || string.IsNullOrWhiteSpace(education.School))
+				if (string.IsNullOrWhiteSpace(educationDTO.Degree) || string.IsNullOrWhiteSpace(educationDTO.School))
 				{
 					return Results.BadRequest("Degree and School fields cannot be empty.");
 				}
@@ -187,11 +187,27 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				var person = await context.Persons.FindAsync(id);
 				if (person == null) return Results.NotFound("Person not found");
 
-				education.PersonId = id;
+				var education = new Education
+				{
+					School = educationDTO.School,
+					Degree = educationDTO.Degree,
+					StartDate = educationDTO.StartDate,
+					EndDate = educationDTO.EndDate,
+					PersonId = id
+				};
+
 				context.Educations.Add(education);
 				await context.SaveChangesAsync();
 
-				return Results.Created($"/educations/{education.EducationId}", education);
+				var createdEducationDTO = new EducationDTO
+				{
+					School = education.School,
+					Degree = education.Degree,
+					StartDate = education.StartDate,
+					EndDate = education.EndDate
+				};
+
+				return Results.Created($"/educations/{education.EducationId}", createdEducationDTO);
 			});
 
 			// Remove an education from a person
