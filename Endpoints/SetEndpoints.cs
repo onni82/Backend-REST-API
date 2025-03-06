@@ -236,7 +236,16 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			// Get all educations
 			app.MapGet("/educations", async (RestApiDbContext context) =>
 			{
-				var educations = await context.Educations.ToListAsync();
+				var educations = await context.Educations
+				.Select(e => new EducationDTO
+				{
+					School = e.School,
+					Degree = e.Degree,
+					StartDate = e.StartDate,
+					EndDate = e.EndDate
+				})
+				.ToListAsync();
+
 				return Results.Ok(educations);
 			});
 
