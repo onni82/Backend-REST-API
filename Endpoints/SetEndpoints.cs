@@ -199,9 +199,9 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Get GitHub repositories
-			app.MapGet("/github/{username}", async (string username) =>
+			app.MapGet("/github/{username}", async (string username, HttpClient httpClient) =>
 			{
-				using var httpClient = new HttpClient();
+				//using var httpClient = new HttpClient();
 				httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
 
 				var url = $"https://api.github.com/users/{username}/repos";
