@@ -80,28 +80,28 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Create a new person
-			app.MapPost("/persons", async (PersonDTO personDTO, RestApiDbContext context) =>
+			app.MapPost("/persons", async (PersonDTO personDto, RestApiDbContext context) =>
 			{
 				var validationResults = new List<ValidationResult>();
-				var validationContext = new ValidationContext(personDTO);
-				if (!Validator.TryValidateObject(personDTO, validationContext, validationResults, true))
+				var validationContext = new ValidationContext(personDto);
+				if (!Validator.TryValidateObject(personDto, validationContext, validationResults, true))
 				{
 					return Results.BadRequest(validationResults);
 				}
 
 				var person = new Person
 				{
-					Name = personDTO.Name,
-					Email = personDTO.Email,
-					Phone = personDTO.Phone,
-					Educations = personDTO.Educations.Select(e => new Education
+					Name = personDto.Name,
+					Email = personDto.Email,
+					Phone = personDto.Phone,
+					Educations = personDto.Educations.Select(e => new Education
 					{
 						School = e.School,
 						Degree = e.Degree,
 						StartDate = e.StartDate,
 						EndDate = e.EndDate
 					}).ToList(),
-					WorkExperiences = personDTO.WorkExperiences.Select(we => new WorkExperience
+					WorkExperiences = personDto.WorkExperiences.Select(we => new WorkExperience
 					{
 						JobTitle = we.JobTitle,
 						Company = we.Company,
@@ -291,16 +291,16 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			//Update a work experience record
-			app.MapPut("/workexperiences/{workExperienceId}", async (int workExperienceId, WorkExperience updatedWorkExperience, RestApiDbContext context) =>
+			app.MapPut("/workexperiences/{workExperienceId}", async (int workExperienceId, WorkExperienceDTO workExperienceDto, RestApiDbContext context) =>
 			{
 				var workExperience = await context.WorkExperiences.FindAsync(workExperienceId);
 				if (workExperience == null) return Results.NotFound("Work experience not found");
 
 				// Update only the necessary fields
-				workExperience.JobTitle = updatedWorkExperience.JobTitle;
-				workExperience.Company = updatedWorkExperience.Company;
-				workExperience.StartDate = updatedWorkExperience.StartDate;
-				workExperience.EndDate = updatedWorkExperience.EndDate;
+				workExperience.JobTitle = workExperienceDto.JobTitle;
+				workExperience.Company = workExperienceDto.Company;
+				workExperience.StartDate = workExperienceDto.StartDate;
+				workExperience.EndDate = workExperienceDto.EndDate;
 
 				await context.SaveChangesAsync();
 				return Results.Ok("Work experience updated successfully");
