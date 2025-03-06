@@ -218,7 +218,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Update an education record
-			app.MapPut("/educations/{educationId}", async (int educationId, Education updatedEducation, RestApiDbContext context) =>
+			app.MapPut("/educations/{educationId}", async (int educationId, EducationDTO updatedEducation, RestApiDbContext context) =>
 			{
 				var education = await context.Educations.FindAsync(educationId);
 				if (education == null) return Results.NotFound("Education not found");
