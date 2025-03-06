@@ -6,71 +6,71 @@ using System.Net.Http.Json;
 
 namespace Backend_REST_API.Endpoints.SetEndpoints
 {
-    public class SetEndpoints
-    {
-        public static void RegisterEndpoints(WebApplication app)
-        {
-            // Get all persons with their related data
-            app.MapGet("/persons", async (RestApiDbContext context) =>
-            {
-                var people = await context.Persons
-                    .Include(p => p.Educations)
-                    .Include(p => p.WorkExperiences)
-                    .ToListAsync();
+	public class SetEndpoints
+	{
+		public static void RegisterEndpoints(WebApplication app)
+		{
+			// Get all persons with their related data
+			app.MapGet("/persons", async (RestApiDbContext context) =>
+			{
+				var people = await context.Persons
+					.Include(p => p.Educations)
+					.Include(p => p.WorkExperiences)
+					.ToListAsync();
 
-                return Results.Ok(people);
-            });
+				return Results.Ok(people);
+			});
 
-            // Get a person by ID, including educations and work experiences
-            app.MapGet("/persons/{id}", async (int id, RestApiDbContext context) =>
-            {
-                var person = await context.Persons
-                    .Include(p => p.Educations)
-                    .Include(p => p.WorkExperiences)
-                    .FirstOrDefaultAsync(p => p.PersonId == id);
+			// Get a person by ID, including educations and work experiences
+			app.MapGet("/persons/{id}", async (int id, RestApiDbContext context) =>
+			{
+				var person = await context.Persons
+					.Include(p => p.Educations)
+					.Include(p => p.WorkExperiences)
+					.FirstOrDefaultAsync(p => p.PersonId == id);
 
-                return person is not null ? Results.Ok(person) : Results.NotFound();
-            });
+				return person is not null ? Results.Ok(person) : Results.NotFound();
+			});
 
-            // Create a new person
-            app.MapPost("/persons", async (Person person, RestApiDbContext context) =>
-            {
-                var validationResults = new List<ValidationResult>();
-                var validationContext = new ValidationContext(person);
-                if (!Validator.TryValidateObject(person, validationContext, validationResults, true))
-                {
-                    return Results.BadRequest(validationResults);
-                }
+			// Create a new person
+			app.MapPost("/persons", async (Person person, RestApiDbContext context) =>
+			{
+				var validationResults = new List<ValidationResult>();
+				var validationContext = new ValidationContext(person);
+				if (!Validator.TryValidateObject(person, validationContext, validationResults, true))
+				{
+					return Results.BadRequest(validationResults);
+				}
 
-                context.Persons.Add(person);
-                await context.SaveChangesAsync();
-                return Results.Created($"/persons/{person.PersonId}", person);
-            });
+				context.Persons.Add(person);
+				await context.SaveChangesAsync();
+				return Results.Created($"/persons/{person.PersonId}", person);
+			});
 
-            // Update a person
-            app.MapPut("/persons/{id}", async (int id, Person updatedPerson, RestApiDbContext context) =>
-            {
-                if (string.IsNullOrWhiteSpace(updatedPerson.Name) ||
-                    string.IsNullOrWhiteSpace(updatedPerson.Email) ||
-                    string.IsNullOrWhiteSpace(updatedPerson.Phone))
-                {
-                    return Results.BadRequest("Name, Email, and Phone cannot be empty.");
-                }
+			// Update a person
+			app.MapPut("/persons/{id}", async (int id, Person updatedPerson, RestApiDbContext context) =>
+			{
+				if (string.IsNullOrWhiteSpace(updatedPerson.Name) ||
+					string.IsNullOrWhiteSpace(updatedPerson.Email) ||
+					string.IsNullOrWhiteSpace(updatedPerson.Phone))
+				{
+					return Results.BadRequest("Name, Email, and Phone cannot be empty.");
+				}
 
-                var person = await context.Persons.FindAsync(id);
-                if (person == null) return Results.NotFound();
+				var person = await context.Persons.FindAsync(id);
+				if (person == null) return Results.NotFound();
 
-                person.Name = updatedPerson.Name;
-                person.Email = updatedPerson.Email;
-                person.Phone = updatedPerson.Phone;
+				person.Name = updatedPerson.Name;
+				person.Email = updatedPerson.Email;
+				person.Phone = updatedPerson.Phone;
 
-                await context.SaveChangesAsync();
-                return Results.NoContent();
-            });
+				await context.SaveChangesAsync();
+				return Results.NoContent();
+			});
 
-            // Delete a person and their associated Educations and Work Experiences
-            app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
-            {
+			// Delete a person and their associated Educations and Work Experiences
+			app.MapDelete("/persons/{id}", async (int id, RestApiDbContext context) =>
+			{
 				var person = await context.Persons
 					.Include(p => p.Educations)
 					.Include(p => p.WorkExperiences)
@@ -86,26 +86,26 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.NoContent();
 			});
 
-            // Add an education to a person
-            app.MapPost("/persons/{id}/educations", async (int id, Education education, RestApiDbContext context) =>
-            {
-                if (string.IsNullOrWhiteSpace(education.Degree) || string.IsNullOrWhiteSpace(education.School))
-                {
-                    return Results.BadRequest("Degree and School fields cannot be empty.");
-                }
+			// Add an education to a person
+			app.MapPost("/persons/{id}/educations", async (int id, Education education, RestApiDbContext context) =>
+			{
+				if (string.IsNullOrWhiteSpace(education.Degree) || string.IsNullOrWhiteSpace(education.School))
+				{
+					return Results.BadRequest("Degree and School fields cannot be empty.");
+				}
 
-                var person = await context.Persons.FindAsync(id);
-                if (person == null) return Results.NotFound("Person not found");
+				var person = await context.Persons.FindAsync(id);
+				if (person == null) return Results.NotFound("Person not found");
 
-                education.PersonId = id;
-                context.Educations.Add(education);
-                await context.SaveChangesAsync();
+				education.PersonId = id;
+				context.Educations.Add(education);
+				await context.SaveChangesAsync();
 
-                return Results.Created($"/educations/{education.EducationId}", education);
-            });
+				return Results.Created($"/educations/{education.EducationId}", education);
+			});
 
-            // Remove an education from a person
-            app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
+			// Remove an education from a person
+			app.MapDelete("/persons/{id}/educations/{educationId}", async (int id, int educationId, RestApiDbContext context) =>
 			{
 				var education = await context.Educations
 					.FirstOrDefaultAsync(e => e.PersonId == id && e.EducationId == educationId);
@@ -144,21 +144,21 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 
 			// Add a work experience to a person
 			app.MapPost("/persons/{id}/workexperiences", async (int id, WorkExperience workExperience, RestApiDbContext context) =>
-            {
-                if (string.IsNullOrWhiteSpace(workExperience.JobTitle) || string.IsNullOrWhiteSpace(workExperience.Company))
-                {
-                    return Results.BadRequest("JobTitle and Company fields cannot be empty.");
-                }
+			{
+				if (string.IsNullOrWhiteSpace(workExperience.JobTitle) || string.IsNullOrWhiteSpace(workExperience.Company))
+				{
+					return Results.BadRequest("JobTitle and Company fields cannot be empty.");
+				}
 
-                var person = await context.Persons.FindAsync(id);
-                if (person == null) return Results.NotFound("Person not found");
+				var person = await context.Persons.FindAsync(id);
+				if (person == null) return Results.NotFound("Person not found");
 
-                workExperience.PersonId = id;
-                context.WorkExperiences.Add(workExperience);
-                await context.SaveChangesAsync();
+				workExperience.PersonId = id;
+				context.WorkExperiences.Add(workExperience);
+				await context.SaveChangesAsync();
 
-                return Results.Created($"/workexperiences/{workExperience.WorkExperienceId}", workExperience);
-            });
+				return Results.Created($"/workexperiences/{workExperience.WorkExperienceId}", workExperience);
+			});
 
 			// Remove a work experience from a person
 			app.MapDelete("/persons/{id}/workexperiences/{workId}", async (int id, int workId, RestApiDbContext context) =>
@@ -223,7 +223,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				return Results.Ok(result);
 			});
 		}
-    }
+	}
 	public class GitHubRepo
 	{
 		public string? Name { get; set; }
