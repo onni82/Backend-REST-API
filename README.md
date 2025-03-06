@@ -1,5 +1,5 @@
 # REST-API för CV-hantering
-
+![ER model of this project. Person has a one-to-many relationship with WorkExperience and a one-to-many relationship with Education.](ER_model.png "ER model")
 ---
 # Vad du ska göra
 
