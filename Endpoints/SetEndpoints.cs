@@ -26,14 +26,14 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 						{
 							School = e.School,
 							Degree = e.Degree,
-							StartDate = e.StartDate.Date,
+							StartDate = e.StartDate,
 							EndDate = e.EndDate
 						}).ToList(),
 						WorkExperiences = p.WorkExperiences.Select(we => new WorkExperienceDTO
 						{
 							JobTitle = we.JobTitle,
 							Company = we.Company,
-							StartDate = we.StartDate.Date,
+							StartDate = we.StartDate,
 							EndDate = we.EndDate
 						}).ToList()
 					})
@@ -80,18 +80,61 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Create a new person
-			app.MapPost("/persons", async (Person person, RestApiDbContext context) =>
+			app.MapPost("/persons", async (PersonDTO personDTO, RestApiDbContext context) =>
 			{
 				var validationResults = new List<ValidationResult>();
-				var validationContext = new ValidationContext(person);
-				if (!Validator.TryValidateObject(person, validationContext, validationResults, true))
+				var validationContext = new ValidationContext(personDTO);
+				if (!Validator.TryValidateObject(personDTO, validationContext, validationResults, true))
 				{
 					return Results.BadRequest(validationResults);
 				}
 
+				var person = new Person
+				{
+					Name = personDTO.Name,
+					Email = personDTO.Email,
+					Phone = personDTO.Phone,
+					Educations = personDTO.Educations.Select(e => new Education
+					{
+						School = e.School,
+						Degree = e.Degree,
+						StartDate = e.StartDate,
+						EndDate = e.EndDate
+					}).ToList(),
+					WorkExperiences = personDTO.WorkExperiences.Select(we => new WorkExperience
+					{
+						JobTitle = we.JobTitle,
+						Company = we.Company,
+						StartDate = we.StartDate,
+						EndDate = we.EndDate
+					}).ToList()
+				};
+
 				context.Persons.Add(person);
 				await context.SaveChangesAsync();
-				return Results.Created($"/persons/{person.PersonId}", person);
+
+				var createdPersonDTO = new PersonDTO
+				{
+					Name = person.Name,
+					Email = person.Email,
+					Phone = person.Phone,
+					Educations = person.Educations.Select(e => new EducationDTO
+					{
+						School = e.School,
+						Degree = e.Degree,
+						StartDate = e.StartDate,
+						EndDate = e.EndDate
+					}).ToList(),
+					WorkExperiences = person.WorkExperiences.Select(we => new WorkExperienceDTO
+					{
+						JobTitle = we.JobTitle,
+						Company = we.Company,
+						StartDate = we.StartDate,
+						EndDate = we.EndDate
+					}).ToList()
+				};
+
+				return Results.Created($"/persons/{person.PersonId}", createdPersonDTO);
 			});
 
 			// Update a person
