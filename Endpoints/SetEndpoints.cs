@@ -138,7 +138,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Update a person
-			app.MapPut("/persons/{id}", async (int id, Person updatedPerson, RestApiDbContext context) =>
+			app.MapPut("/persons/{id}", async (int id, PersonDTO updatedPerson, RestApiDbContext context) =>
 			{
 				if (string.IsNullOrWhiteSpace(updatedPerson.Name) ||
 					string.IsNullOrWhiteSpace(updatedPerson.Email) ||
