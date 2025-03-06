@@ -1,4 +1,5 @@
 ﻿using Backend_REST_API.Data;
+using Backend_REST_API.DTOs;
 using Backend_REST_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,26 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				var people = await context.Persons
 					.Include(p => p.Educations)
 					.Include(p => p.WorkExperiences)
+					.Select(p => new PersonDTO
+					{
+						Name = p.Name,
+						Email = p.Email,
+						Phone = p.Phone,
+						Educations = p.Educations.Select(e => new EducationDTO
+						{
+							School = e.School,
+							Degree = e.Degree,
+							StartDate = e.StartDate.Date,
+							EndDate = e.EndDate
+						}).ToList(),
+						WorkExperiences = p.WorkExperiences.Select(we => new WorkExperienceDTO
+						{
+							JobTitle = we.JobTitle,
+							Company = we.Company,
+							StartDate = we.StartDate.Date,
+							EndDate = we.EndDate
+						}).ToList()
+					})
 					.ToListAsync();
 
 				return Results.Ok(people);
