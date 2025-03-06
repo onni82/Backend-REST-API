@@ -309,7 +309,15 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			// Get all work experiences
 			app.MapGet("/workexperiences", async (RestApiDbContext context) =>
 			{
-				var workExperiences = await context.WorkExperiences.ToListAsync();
+				var workExperiences = await context.WorkExperiences
+				.Select(we => new WorkExperienceDTO
+				{
+					JobTitle = we.JobTitle,
+					Company = we.Company,
+					StartDate = we.StartDate,
+					EndDate = we.EndDate
+				})
+				.ToListAsync();
 				return Results.Ok(workExperiences);
 			});
 
