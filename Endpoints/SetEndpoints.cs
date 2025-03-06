@@ -199,15 +199,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				context.Educations.Add(education);
 				await context.SaveChangesAsync();
 
-				var createdEducationDTO = new EducationDTO
-				{
-					School = education.School,
-					Degree = education.Degree,
-					StartDate = education.StartDate,
-					EndDate = education.EndDate
-				};
-
-				return Results.Created($"/educations/{education.EducationId}", createdEducationDTO);
+				return Results.Created($"/educations/{education.EducationId}", educationDTO);
 			});
 
 			// Remove an education from a person
