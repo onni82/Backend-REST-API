@@ -23,7 +23,9 @@ namespace Backend_REST_API
 				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 			});
 
-			var app = builder.Build();
+            builder.Services.AddHttpClient();
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
