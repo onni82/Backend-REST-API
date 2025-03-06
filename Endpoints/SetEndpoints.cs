@@ -250,9 +250,9 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 			});
 
 			// Add a work experience to a person
-			app.MapPost("/persons/{id}/workexperiences", async (int id, WorkExperience workExperience, RestApiDbContext context) =>
+			app.MapPost("/persons/{id}/workexperiences", async (int id, WorkExperienceDTO workExperienceDto, RestApiDbContext context) =>
 			{
-				if (string.IsNullOrWhiteSpace(workExperience.JobTitle) || string.IsNullOrWhiteSpace(workExperience.Company))
+				if (string.IsNullOrWhiteSpace(workExperienceDto.JobTitle) || string.IsNullOrWhiteSpace(workExperienceDto.Company))
 				{
 					return Results.BadRequest("JobTitle and Company fields cannot be empty.");
 				}
@@ -260,7 +260,15 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				var person = await context.Persons.FindAsync(id);
 				if (person == null) return Results.NotFound("Person not found");
 
-				workExperience.PersonId = id;
+				var workExperience = new WorkExperience
+				{
+					PersonId = id,
+					JobTitle = workExperienceDto.JobTitle,
+					Company = workExperienceDto.Company,
+					StartDate = workExperienceDto.StartDate,
+					EndDate = workExperienceDto.EndDate
+				};
+
 				context.WorkExperiences.Add(workExperience);
 				await context.SaveChangesAsync();
 
