@@ -50,7 +50,33 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 					.Include(p => p.WorkExperiences)
 					.FirstOrDefaultAsync(p => p.PersonId == id);
 
-				return person is not null ? Results.Ok(person) : Results.NotFound();
+				if (person is null)
+				{
+                    return Results.NotFound();
+                }
+
+				var personDTO = new PersonDTO
+				{
+					Name = person.Name,
+					Email = person.Email,
+					Phone = person.Phone,
+					Educations = person.Educations.Select(e => new EducationDTO
+					{
+						School = e.School,
+						Degree = e.Degree,
+						StartDate = e.StartDate,
+						EndDate = e.EndDate
+					}).ToList(),
+					WorkExperiences = person.WorkExperiences.Select(we => new WorkExperienceDTO
+					{
+						JobTitle = we.JobTitle,
+						Company = we.Company,
+						StartDate = we.StartDate,
+						EndDate = we.EndDate
+					}).ToList()
+				};
+
+				return Results.Ok(personDTO);
 			});
 
 			// Create a new person
