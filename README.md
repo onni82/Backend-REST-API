@@ -16,7 +16,7 @@ Du ska designa och skapa en databas som lagrar information om en persons utbildn
 
 - [x]  Designa ett **ER-diagram** som visar hur tabellerna är relaterade.
 - [x]  Skapa databasen med **Entity Framework Core** genom **Code-First**.
-- [ ]  Lägg upp en bild av ditt **ER-diagram** i **README-filen** i ditt Git-repo.
+- [x]  Lägg upp en bild av ditt **ER-diagram** i **README-filen** i ditt Git-repo.
 
 ---
 
@@ -52,6 +52,6 @@ För att inkludera anrop till externa API:er ska du:
 
 För att säkerställa att API:et är robust och säkert ska du:
 
-- [ ]  Implementera **validering** för att förhindra att ogiltiga eller tomma fält skickas in.
-- [ ]  Säkerställ att API:et returnerar **relevanta status koder** vid olika typer av anrop.
+- [x]  Implementera **validering** för att förhindra att ogiltiga eller tomma fält skickas in.
+- [x]  Säkerställ att API:et returnerar **relevanta status koder** vid olika typer av anrop.
 - [ ]  Förhindra att användare kan ändra eller ta bort data som de inte själva har skapat.
