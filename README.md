@@ -54,4 +54,4 @@ För att säkerställa att API:et är robust och säkert ska du:
 
 - [x]  Implementera **validering** för att förhindra att ogiltiga eller tomma fält skickas in.
 - [x]  Säkerställ att API:et returnerar **relevanta status koder** vid olika typer av anrop.
-- [ ]  Förhindra att användare kan ändra eller ta bort data som de inte själva har skapat.
+- [ ]  EXTRA UTMANING: Förhindra att användare kan ändra eller ta bort data som de inte själva har skapat. (Frivilligt!)
