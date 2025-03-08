@@ -273,7 +273,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 				context.WorkExperiences.Add(workExperience);
 				await context.SaveChangesAsync();
 
-				return Results.Created($"/workexperiences/{workExperience.WorkExperienceId}", workExperience);
+				return Results.Created($"/workexperiences/{workExperience.WorkExperienceId}", workExperienceDto);
 			});
 
 			// Remove a work experience from a person
