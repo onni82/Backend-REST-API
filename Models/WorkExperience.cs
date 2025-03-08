@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Backend_REST_API.Models
 {
@@ -22,6 +23,7 @@ namespace Backend_REST_API.Models
 
 		[ForeignKey("Person")]
 		public int PersonId { get; set; }
-		public Person? Person { get; set; }
+        [JsonIgnore]
+        public Person? Person { get; set; }
 	}
 }
