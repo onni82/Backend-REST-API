@@ -25,6 +25,11 @@ namespace Backend_REST_API
 
             builder.Services.AddHttpClient();
 
+			builder.Services.ConfigureHttpJsonOptions(options =>
+			{
+				options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+			});
+
             var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
