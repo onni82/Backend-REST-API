@@ -4,6 +4,7 @@ using Backend_REST_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 
 namespace Backend_REST_API.Endpoints.SetEndpoints
 {
@@ -352,6 +353,7 @@ namespace Backend_REST_API.Endpoints.SetEndpoints
 		public string? Name { get; set; }
 		public string? Language { get; set; }
 		public string? Description { get; set; }
-		public string? HtmlUrl { get; set; }
+        [JsonPropertyName("html_url")]
+        public string? HtmlUrl { get; set; }
 	}
 }
